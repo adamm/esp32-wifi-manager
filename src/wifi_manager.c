@@ -202,6 +202,11 @@ void wifi_manager_start(){
 	wifi_manager_safe_update_sta_ip_string((uint32_t)0);
 	wifi_manager_event_group = xEventGroupCreate();
 
+	uint8_t eth_mac[12];
+	esp_wifi_get_mac(WIFI_IF_STA, eth_mac);
+	sprintf((char*)wifi_settings.ap_ssid, "%s_%02X%02X%02X",
+		DEFAULT_AP_SSID, eth_mac[3], eth_mac[4], eth_mac[5]);
+
 	/* create timer for to keep track of retries */
 	wifi_manager_retry_timer = xTimerCreate( NULL, pdMS_TO_TICKS(WIFI_MANAGER_RETRY_TIMER), pdFALSE, ( void * ) 0, wifi_manager_timer_retry_cb);
 
