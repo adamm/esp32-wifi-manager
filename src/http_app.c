@@ -71,12 +71,12 @@ static char* http_status_url = NULL;
  * @see file "component.mk"
  * @see https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#embedding-binary-data
  */
-extern const uint8_t style_css_start[] asm("_binary_style_css_start");
-extern const uint8_t style_css_end[]   asm("_binary_style_css_end");
-extern const uint8_t code_js_start[] asm("_binary_code_js_start");
-extern const uint8_t code_js_end[] asm("_binary_code_js_end");
-extern const uint8_t index_html_start[] asm("_binary_index_html_start");
-extern const uint8_t index_html_end[] asm("_binary_index_html_end");
+extern const uint8_t wifi_css_start[] asm("_binary_wifi_css_start");
+extern const uint8_t wifi_css_end[]   asm("_binary_wifi_css_end");
+extern const uint8_t wifi_js_start[] asm("_binary_wifi_js_start");
+extern const uint8_t wifi_js_end[] asm("_binary_wifi_js_end");
+extern const uint8_t wifi_html_start[] asm("_binary_wifi_html_start");
+extern const uint8_t wifi_html_end[] asm("_binary_wifi_html_end");
 
 
 /* const httpd related values stored in ROM */
@@ -249,20 +249,20 @@ static esp_err_t http_server_get_handler(httpd_req_t *req){
 		if(strcmp(req->uri, http_root_url) == 0){
 			httpd_resp_set_status(req, http_200_hdr);
 			httpd_resp_set_type(req, http_content_type_html);
-			httpd_resp_send(req, (char*)index_html_start, index_html_end - index_html_start);
+			httpd_resp_send(req, (char*)wifi_html_start, wifi_html_end - wifi_html_start);
 		}
-		/* GET /code.js */
+		/* GET /wifi.js */
 		else if(strcmp(req->uri, http_js_url) == 0){
 			httpd_resp_set_status(req, http_200_hdr);
 			httpd_resp_set_type(req, http_content_type_js);
-			httpd_resp_send(req, (char*)code_js_start, code_js_end - code_js_start);
+			httpd_resp_send(req, (char*)wifi_js_start, wifi_js_end - wifi_js_start);
 		}
-		/* GET /style.css */
+		/* GET /wifi.css */
 		else if(strcmp(req->uri, http_css_url) == 0){
 			httpd_resp_set_status(req, http_200_hdr);
 			httpd_resp_set_type(req, http_content_type_css);
 			httpd_resp_set_hdr(req, http_cache_control_hdr, http_cache_control_cache);
-			httpd_resp_send(req, (char*)style_css_start, style_css_end - style_css_start);
+			httpd_resp_send(req, (char*)wifi_css_start, wifi_css_end - wifi_css_start);
 		}
 		/* GET /ap.json */
 		else if(strcmp(req->uri, http_ap_url) == 0){
@@ -433,8 +433,8 @@ void http_app_start(bool lru_purge_enable){
 			int root_len = strlen(WEBAPP_LOCATION);
 
 			/* all the pages */
-			const char page_js[] = "code.js";
-			const char page_css[] = "style.css";
+			const char page_js[] = "wifi.js";
+			const char page_css[] = "wifi.css";
 			const char page_connect[] = "connect.json";
 			const char page_ap[] = "ap.json";
 			const char page_status[] = "status.json";
